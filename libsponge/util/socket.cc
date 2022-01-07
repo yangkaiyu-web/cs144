@@ -62,7 +62,11 @@ void Socket::bind(const Address &address) { SystemCall("bind", ::bind(fd_num(), 
 
 // connect socket to a specified peer address
 //! \param[in] address is the peer's Address
-void Socket::connect(const Address &address) { SystemCall("connect", ::connect(fd_num(), address, address.size())); }
+void Socket::connect(const Address &address) {
+    auto t = ::connect(fd_num(), address, address.size());
+    printf("rval:%d\n",t);
+    SystemCall("connect", t); 
+    }
 
 // shut down a socket in the specified way
 //! \param[in] how can be `SHUT_RD`, `SHUT_WR`, or `SHUT_RDWR`; see [shutdown(2)](\ref man2::shutdown)

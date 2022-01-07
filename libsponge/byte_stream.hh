@@ -2,6 +2,7 @@
 #define SPONGE_LIBSPONGE_BYTE_STREAM_HH
 
 #include <string>
+#include <deque>
 
 //! \brief An in-order byte stream.
 
@@ -9,8 +10,14 @@
 //! side.  The byte stream is finite: the writer can end the input,
 //! and then no more bytes can be written.
 class ByteStream {
-  private:
+  public:
     // Your code here -- add private members as necessary.
+    std::deque<char> dq={};
+    int capacity;
+    int byte_rcnt = 0;
+    int byte_wcnt = 0;
+    bool endWrite_flag = false;
+    bool read_eof = false;
 
     // Hint: This doesn't need to be a sophisticated data structure at
     // all, but if any of your tests are taking longer than a second,
@@ -19,9 +26,9 @@ class ByteStream {
 
     bool _error{};  //!< Flag indicating that the stream suffered an error.
 
-  public:
+//  public:
     //! Construct a stream with room for `capacity` bytes.
-    ByteStream(const size_t capacity);
+    ByteStream(const size_t pcapacity);
 
     //! \name "Input" interface for the writer
     //!@{

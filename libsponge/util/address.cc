@@ -45,13 +45,11 @@ class gai_error_category : public error_category {
 Address::Address(const string &node, const string &service, const addrinfo &hints) : _size() {
     // prepare for the answer
     addrinfo *resolved_address = nullptr;
-
     // look up the name or names
     const int gai_ret = getaddrinfo(node.c_str(), service.c_str(), &hints, &resolved_address);
     if (gai_ret != 0) {
         throw tagged_error(gai_error_category(), "getaddrinfo(" + node + ", " + service + ")", gai_ret);
     }
-
     // if success, should always have at least one entry
     if (resolved_address == nullptr) {
         throw runtime_error("getaddrinfo returned successfully but with no results");

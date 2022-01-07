@@ -23,7 +23,7 @@ int main() {
             ByteStreamTestHarness test{"construction-end", 15};
             test.execute(EndInput{});
             test.execute(InputEnded{true});
-            test.execute(BufferEmpty{true});
+            test.execute(BufferEmpty{true});            
             test.execute(Eof{true});
             test.execute(BytesRead{0});
             test.execute(BytesWritten{0});

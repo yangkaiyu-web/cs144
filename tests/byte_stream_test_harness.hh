@@ -129,11 +129,12 @@ struct Peek : public ByteStreamExpectation {
 };
 
 class ByteStreamTestHarness {
+    public:
     std::string _test_name;
     ByteStream _byte_stream;
     std::vector<std::string> _steps_executed{};
 
-  public:
+//  public:
     ByteStreamTestHarness(const std::string &test_name, const size_t capacity);
 
     void execute(const ByteStreamTestStep &step);

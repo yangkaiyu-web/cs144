@@ -8,6 +8,16 @@ using namespace std;
 
 void get_URL(const string &host, const string &path) {
     // Your code here.
+    TCPSocket tst1;
+    tst1.connect(Address(host, "http"));
+    std::string str("GET " + path + " HTTP/1.1\r\n" + 
+                     "Host: " + host + "\r\n" +
+                     "Connection: close\r\n\r\n"
+                    );
+    tst1.write(str);
+    tst1.shutdown(SHUT_WR);
+    while ((str = tst1.read()).size())
+        cout << str;
 
     // You will need to connect to the "http" service on
     // the computer whose name is in the "host" string,
@@ -16,9 +26,6 @@ void get_URL(const string &host, const string &path) {
     // Then you'll need to print out everything the server sends back,
     // (not just one call to read() -- everything) until you reach
     // the "eof" (end of file).
-
-    cerr << "Function called: get_URL(" << host << ", " << path << ").\n";
-    cerr << "Warning: get_URL() has not been implemented yet.\n";
 }
 
 int main(int argc, char *argv[]) {
