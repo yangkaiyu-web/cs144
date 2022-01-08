@@ -24,16 +24,6 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     size_t curr_maxindex = min(this->_capacity - (this->_output).buffer_size() + 
                             this->unassembled_index, index + data.size()) - 1;
 
-    if(data == "cd" && index == 2)
-        cout<< "dsf" << curr_maxindex<<"data:"<<data<<endl;
-    //size_t lent = this->_capacity - this->unassembled_cnt - (this->_output).buffer_size();
-
-    // if(lent > data.size())
-    // {
-    //     lent = data.size();
-    // }
-    // else if(lent <= 0)
-    //     return;
     if(eof)
     {
         this->stream_eof = true;
@@ -43,12 +33,6 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     }
 
     size_t i = 0;
-    if(data == "cd" && index == 2)
-    {
-        cout<<"m:"<<endl;
-        for(auto t:m)
-            cout<<t.first<<" "<<t.second<<endl;
-    }
     for(auto c : data)
     {
         if(index + i > curr_maxindex)
@@ -60,10 +44,8 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
         }
         ++i;
     }
-    if(data == "cd" && index == 2)
-        cout<<"i:"<<i<<endl;
+
     auto iter = m.find(this->unassembled_index);
-    cout<< "this->unassembled_index:" << this->unassembled_index << "==?" << (iter == m.end()) <<endl;
     if(iter != m.end())
     {
         int newAssembled_cnt = 0;
@@ -76,13 +58,9 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
                 ++iter;
                 break;
             }
-            if(data == "cd" && index == 2)
-                cout<<"str:"<<str<<endl;
             str += iter->second;
             newAssembled_cnt += 1;
         }
-        if(data == "cd" && index == 2)
-            cout<<"str:"<<str<<"close:"<<this->_output.input_ended()<<endl;
         this->_output.write(str);
         this->unassembled_cnt -= newAssembled_cnt;
         this->unassembled_index += newAssembled_cnt;

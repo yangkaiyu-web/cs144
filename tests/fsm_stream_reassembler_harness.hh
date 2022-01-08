@@ -159,8 +159,6 @@ struct SubmitSegment : public ReassemblerAction {
     void execute(StreamReassembler &reassembler) const 
     { 
         reassembler.push_substring(_data, _index, _eof); 
-        if(_data == "cd" && _index == 2)
-            std::cout<<reassembler.stream_out().bytes_written()<<std::endl;
     }
 };
 
