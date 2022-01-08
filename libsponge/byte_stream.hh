@@ -10,7 +10,7 @@
 //! side.  The byte stream is finite: the writer can end the input,
 //! and then no more bytes can be written.
 class ByteStream {
-  public:
+  private:
     // Your code here -- add private members as necessary.
     std::deque<char> dq={};
     int capacity;
@@ -26,7 +26,7 @@ class ByteStream {
 
     bool _error{};  //!< Flag indicating that the stream suffered an error.
 
-//  public:
+  public:
     //! Construct a stream with room for `capacity` bytes.
     ByteStream(const size_t pcapacity);
 

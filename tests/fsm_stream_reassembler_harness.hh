@@ -156,7 +156,12 @@ struct SubmitSegment : public ReassemblerAction {
         return ss.str();
     }
 
-    void execute(StreamReassembler &reassembler) const { reassembler.push_substring(_data, _index, _eof); }
+    void execute(StreamReassembler &reassembler) const 
+    { 
+        reassembler.push_substring(_data, _index, _eof); 
+        if(_data == "cd" && _index == 2)
+            std::cout<<reassembler.stream_out().bytes_written()<<std::endl;
+    }
 };
 
 class ReassemblerTestHarness {
