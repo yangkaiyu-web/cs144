@@ -19,9 +19,6 @@ add_test_exec (byte_stream_construction)
 add_test_exec (byte_stream_one_write)
 add_test_exec (byte_stream_two_writes)
 add_test_exec (byte_stream_capacity)
-<<<<<<< HEAD
-add_test_exec (byte_stream_many_writes)
-=======
 add_test_exec (byte_stream_many_writes)
 add_test_exec (wrapping_integers_cmp)
 add_test_exec (wrapping_integers_unwrap)
@@ -33,4 +30,3 @@ add_test_exec (recv_window)
 add_test_exec (recv_reorder)
 add_test_exec (recv_close)
 add_test_exec (recv_special)
->>>>>>> origin/lab2-startercode

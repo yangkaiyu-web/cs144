@@ -15,17 +15,19 @@ class StreamReassembler {
 
     ByteStream _output;  //!< The reassembled in-order byte stream
     size_t _capacity;    //!< The maximum number of bytes
-    std::map<int,char> m = {};
+    std::map<int64_t,char> m = {};
     size_t unassembled_cnt = 0;
     bool stream_eof = false;
-    int unassembled_index = 0;
-    int Endindex = -1;
+    int64_t unassembled_index = 0;
+    int64_t Endindex = -1;
   
   public:
     //! \brief Construct a `StreamReassembler` that will store up to `capacity` bytes.
     //! \note This capacity limits both the bytes that have been reassembled,
     //! and those that have not yet been reassembled.
     StreamReassembler(const size_t capacity);
+
+    uint32_t unassembledIndex() const {return unassembled_index; };
 
     //! \brief Receive a substring and write any newly contiguous bytes into the stream.
     //!

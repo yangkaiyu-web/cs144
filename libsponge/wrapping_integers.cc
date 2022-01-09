@@ -1,4 +1,5 @@
 #include "wrapping_integers.hh"
+#include <iostream>
 
 // Dummy implementation of a 32-bit wrapping integer
 
@@ -14,8 +15,8 @@ using namespace std;
 //! \param n The input absolute 64-bit sequence number
 //! \param isn The initial sequence number
 WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
-    DUMMY_CODE(n, isn);
-    return WrappingInt32{0};
+    uint32_t n32 = n & 0xFFFFFFFF;
+    return isn + n32;
 }
 
 //! Transform a WrappingInt32 into an "absolute" 64-bit sequence number (zero-indexed)
@@ -29,6 +30,18 @@ WrappingInt32 wrap(uint64_t n, WrappingInt32 isn) {
 //! and the other stream runs from the remote TCPSender to the local TCPReceiver and
 //! has a different ISN.
 uint64_t unwrap(WrappingInt32 n, WrappingInt32 isn, uint64_t checkpoint) {
-    DUMMY_CODE(n, isn, checkpoint);
-    return {};
+    int64_t t = n - isn;
+    uint64_t t1 = t + ((checkpoint & (0xFFFFFFFF00000000)) - (1ul << 32));
+    uint64_t t2 = t + (checkpoint & (0xFFFFFFFF00000000));
+    uint64_t t3 = t + ((checkpoint & (0xFFFFFFFF00000000)) + (1ul << 32));
+    uint64_t a1 = checkpoint > t1 ? (checkpoint - t1) : (t1 - checkpoint);
+    uint64_t a2 = checkpoint > t2 ? (checkpoint - t2) : (t2 - checkpoint);
+    uint64_t a3 = checkpoint > t3 ? (checkpoint - t3) : (t3 - checkpoint);
+
+    if(a2 > a1 && a3 > a1)
+        return t1;
+    else if(a1 > a2 && a3 > a2)
+        return t2;
+    else
+        return t3;
 }

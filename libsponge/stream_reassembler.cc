@@ -24,10 +24,12 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     size_t curr_maxindex = min(this->_capacity - (this->_output).buffer_size() + 
                             this->unassembled_index, index + data.size()) - 1;
 
+    //cout << "data:" << data << "index:" << index << "eof:" << eof << endl;
     if(eof)
     {
         this->stream_eof = true;
         this->Endindex = index + data.size() - 1;
+        //cout<< "Endindex:" <<this->Endindex <<" unassembled_index:"<<this->unassembled_index<<endl;
         if(this->Endindex < this->unassembled_index)
             this->_output.end_input();
     }
