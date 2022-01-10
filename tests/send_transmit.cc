@@ -21,17 +21,29 @@ int main() {
             cfg.fixed_isn = isn;
 
             TCPSenderTestHarness test{"Three short writes", cfg};
+            cout<<1<<endl;
             test.execute(ExpectSegment{}.with_no_flags().with_syn(true).with_payload_size(0).with_seqno(isn));
+            cout<<2<<endl;
             test.execute(AckReceived{WrappingInt32{isn + 1}});
+            cout<<3<<endl;
             test.execute(ExpectState{TCPSenderStateSummary::SYN_ACKED});
+            cout<<4<<endl;
             test.execute(WriteBytes{"ab"});
+            cout<<5<<endl;
             test.execute(ExpectSegment{}.with_data("ab").with_seqno(isn + 1));
+            cout<<6<<endl;
             test.execute(WriteBytes{"cd"});
+            cout<<7<<endl;
             test.execute(ExpectSegment{}.with_data("cd").with_seqno(isn + 3));
+            cout<<8<<endl;
             test.execute(WriteBytes{"abcd"});
+            cout<<9<<endl;
             test.execute(ExpectSegment{}.with_data("abcd").with_seqno(isn + 5));
+            cout<<10<<endl;
             test.execute(ExpectSeqno{WrappingInt32{isn + 9}});
+            cout<<11<<endl;
             test.execute(ExpectBytesInFlight{8});
+            cout<<12<<endl;
             test.execute(ExpectState{TCPSenderStateSummary::SYN_ACKED});
         }
 

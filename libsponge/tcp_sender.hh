@@ -19,18 +19,27 @@ class TCPSender {
   private:
     //! our initial sequence number, the number for our SYN.
     WrappingInt32 _isn;
-
+    WrappingInt32 mostRecent_ackno;
     //! outbound queue of segments that the TCPSender wants sent
     std::queue<TCPSegment> _segments_out{};
+    std::queue<TCPSegment> unack_segments{};
 
     //! retransmission timer for the connection
     unsigned int _initial_retransmission_timeout;
+    unsigned int RTO;
+    unsigned int retransmission_timer = 0;
+    unsigned int consecutive_retransmissions_cnt = 0;
+
+    bool clock_running = false;
+    bool _closed = false;
 
     //! outgoing stream of bytes that have not yet been sent
     ByteStream _stream;
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+
+    uint16_t recv_window{1};
 
   public:
     //! Initialize a TCPSender
@@ -67,6 +76,7 @@ class TCPSender {
     //! \note count is in "sequence space," i.e. SYN and FIN each count for one byte
     //! (see TCPSegment::length_in_sequence_space())
     size_t bytes_in_flight() const;
+    bool closed() { return _closed; };
 
     //! \brief Number of consecutive retransmissions that have occurred in a row
     unsigned int consecutive_retransmissions() const;
@@ -77,7 +87,7 @@ class TCPSender {
     //! (ackno and window size) before sending.
     std::queue<TCPSegment> &segments_out() { return _segments_out; }
     //!@}
-
+    std::queue<TCPSegment> &unack_segments_out() { return unack_segments; };
     //! \name What is the next sequence number? (used for testing)
     //!@{
 

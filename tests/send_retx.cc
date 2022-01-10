@@ -93,6 +93,7 @@ int main() {
             test.execute(ExpectBytesInFlight{0});
             test.execute(WriteBytes{"ijkl"});
             test.execute(ExpectSegment{}.with_payload_size(4).with_seqno(isn + 9));
+            cout<<"this"<<endl;
             for (size_t attempt_no = 0; attempt_no < TCPConfig::MAX_RETX_ATTEMPTS; attempt_no++) {
                 test.execute(Tick{(retx_timeout << attempt_no) - 1u}.with_max_retx_exceeded(false));
                 test.execute(ExpectNoSegment{});

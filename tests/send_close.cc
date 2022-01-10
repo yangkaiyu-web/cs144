@@ -36,17 +36,27 @@ int main() {
             TCPConfig cfg;
             WrappingInt32 isn(rd());
             cfg.fixed_isn = isn;
-
+            cout<<"isn:"<<isn<<endl;
             TCPSenderTestHarness test{"FIN acked test", cfg};
+            cout<<1<<endl;
             test.execute(ExpectSegment{}.with_no_flags().with_syn(true).with_payload_size(0).with_seqno(isn));
+            cout<<2<<endl;
             test.execute(AckReceived{WrappingInt32{isn + 1}});
+            cout<<3<<endl;
             test.execute(ExpectState{TCPSenderStateSummary::SYN_ACKED});
+            cout<<4<<endl;
             test.execute(Close{});
+            cout<<5<<endl;
             test.execute(ExpectState{TCPSenderStateSummary::FIN_SENT});
+            cout<<6<<endl;
             test.execute(ExpectSegment{}.with_fin(true).with_seqno(isn + 1));
+            cout<<7<<endl;
             test.execute(AckReceived{WrappingInt32{isn + 2}});
+            cout<<8<<endl;
             test.execute(ExpectState{TCPSenderStateSummary::FIN_ACKED});
+            cout<<9<<endl;
             test.execute(ExpectBytesInFlight{0});
+            cout<<10<<endl;
             test.execute(ExpectNoSegment{});
         }
 

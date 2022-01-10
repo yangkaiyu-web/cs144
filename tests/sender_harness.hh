@@ -15,6 +15,7 @@
 #include <optional>
 #include <sstream>
 #include <string>
+using namespace std;
 
 const unsigned int DEFAULT_TEST_WINDOW = 137;
 
@@ -205,7 +206,9 @@ struct AckReceived : public SenderAction {
     }
 
     void execute(TCPSender &sender, std::queue<TCPSegment> &) const {
+        //std::cout<< "this" << std::endl;
         sender.ack_received(_ackno, _window_advertisement.value_or(DEFAULT_TEST_WINDOW));
+        //std::cout << "that" << std::endl;
         sender.fill_window();
     }
 };
@@ -341,6 +344,7 @@ struct ExpectSegment : public SenderExpectation {
             throw SegmentExpectationViolation::violated_verb("existed");
         }
         TCPSegment seg = std::move(segments.front());
+        
         segments.pop();
         if (ack.has_value() and seg.header().ack != ack.value()) {
             throw SegmentExpectationViolation::violated_field("ack", ack.value(), seg.header().ack);
@@ -386,7 +390,10 @@ class TCPSenderTestHarness {
 
     void collect_output() {
         while (not sender.segments_out().empty()) {
+            //cout<<"in collect_output1:"<<sender.segments_out().front().payload().copy()<<endl;
             outbound_segments.push(std::move(sender.segments_out().front()));
+            //cout<<"in collect_output2:"<<outbound_segments.size()<<endl;
+
             sender.segments_out().pop();
         }
     }
@@ -408,7 +415,11 @@ class TCPSenderTestHarness {
     void execute(const SenderTestStep &step) {
         try {
             step.execute(sender, outbound_segments);
+            //if(!sender.segments_out().empty())
+            //    cout<<"sender.segments_out().front().payload().copy()"<<sender.segments_out().front().payload().copy()<<endl;
             collect_output();
+            //if(!outbound_segments.empty())
+            //    cout<<"outbound.front().payload().copy()"<<outbound_segments.front().payload().copy()<<endl;
             steps_executed.emplace_back(step);
         } catch (const SenderExpectationViolation &e) {
             std::cerr << "Test Failure on expectation:\n\t" << std::string(step);

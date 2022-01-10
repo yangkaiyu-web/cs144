@@ -74,6 +74,7 @@ class ByteStream {
     //! \returns `true` if the buffer is empty
     bool buffer_empty() const;
 
+    bool read_end() const { return this->byte_rcnt == this->byte_wcnt; }
     //! \returns `true` if the output has reached the ending
     bool eof() const;
     //!@}
